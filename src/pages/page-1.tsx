@@ -1,13 +1,13 @@
+import { useMemo } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import Image from 'next/image';
 import { gql, useQuery } from '@apollo/client';
 
 import styles from '../styles/Home.module.css';
-import { useMemo } from 'react';
-import Link from 'next/link';
 
-const Home: NextPage = () => {
+const Page1: NextPage = () => {
   const { loading, data } = useQuery(gql`
     query TodosAll {
       todosAll {
@@ -19,7 +19,7 @@ const Home: NextPage = () => {
   `);
   const todos = useMemo(() => data?.todosAll || [], [data?.todosAll]);
 
-  console.log(loading, todos);
+  console.log('Page 1:', loading, todos);
 
   return (
     <div className={styles.container}>
@@ -71,4 +71,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Page1;
