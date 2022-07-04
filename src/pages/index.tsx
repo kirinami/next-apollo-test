@@ -3,23 +3,27 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-import { gql, useQuery } from '@apollo/client';
+import { withUrqlClient } from 'next-urql';
+import { dedupExchange, cacheExchange, fetchExchange, useQuery } from 'urql';
 
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
-  const { loading, data } = useQuery(gql`
-    query TodosAll {
-      todosAll {
-        id
-        title
-        completed
+  const [{ fetching, data }] = useQuery({
+    query: `
+      query TodosAll {
+        todosAll {
+          id
+          title
+          completed
+        }
       }
-    }
-  `);
+    `,
+  });
+
   const todos = useMemo(() => data?.todosAll || [], [data?.todosAll]);
 
-  console.log('Home:', loading, todos);
+  console.log('Home:', fetching, todos);
 
   return (
     <div className={styles.container}>
@@ -71,4 +75,12 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default withUrqlClient((ssrExchange, ctx) => ({
+  url: 'https://playground.kirinami.com/graphql',
+  exchanges: [dedupExchange, cacheExchange, ssrExchange, fetchExchange],
+  fetchOptions: {
+    headers: {
+      authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTY1Njk0NTk1NiwiZXhwIjoxNjU3NTUwNzU2fQ.PUNbuXqFxSuVL8dugY5862kbrPHK2bGOD0H0TgkD2zU',
+    },
+  },
+}))(Home);
