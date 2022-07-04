@@ -15,12 +15,12 @@ function createHttpLink() {
   });
 }
 
-function createApolloClient() {
+export function createApolloClient(initialState?: NormalizedCacheObject) {
   const apolloClient = new ApolloClient({
     ssrMode: isServer,
     ssrForceFetchDelay: isServer ? 100 : undefined,
     link: createHttpLink(),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache().restore(initialState || {}),
     defaultOptions: {
       watchQuery: {
         errorPolicy: 'all',
