@@ -7,6 +7,7 @@ import { ApolloProvider } from '@apollo/client';
 import initApolloClient from '../helpers/initApolloClient';
 
 function MyApp({ pageProps: { apolloClient, apolloState, ...pageProps }, Component }: AppProps) {
+  console.log('MyApp');
   return (
     <ApolloProvider client={useMemo(() => apolloClient || initApolloClient(null, apolloState), [apolloClient, apolloState])}>
       <Component {...pageProps} />
