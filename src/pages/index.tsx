@@ -83,4 +83,4 @@ export default withUrqlClient((ssrExchange, ctx) => ({
       authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTY1Njk0NTk1NiwiZXhwIjoxNjU3NTUwNzU2fQ.PUNbuXqFxSuVL8dugY5862kbrPHK2bGOD0H0TgkD2zU',
     },
   },
-}))(Home);
+}), { ssr: true })(Home);
